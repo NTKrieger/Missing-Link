@@ -1,0 +1,15 @@
+{
+  "name": "lushbot",
+  "version": "1.0.0",
+  "description": "A Twitch Chat to Twitter Interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "F:/Desktop/LushBot"
+  },
+  "author": "Nathanial Krieger",
+  "license": "ISC"
+}
