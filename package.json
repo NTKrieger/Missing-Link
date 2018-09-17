@@ -11,5 +11,13 @@
     "url": "F:/Desktop/LushBot"
   },
   "author": "Nathanial Krieger",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^5.5.0",
+    "firebase-admin": "^6.0.0",
+    "twit": "^2.2.11",
+    "twitch-bot": "^1.2.5",
+    "websocket": "^1.0.26",
+    "websocket-node": "^0.1.0"
+  }
 }
