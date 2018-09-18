@@ -1,9 +1,10 @@
 # Missing Link
-### Missing Link is a tiny bot that suppliments the functionality of other full-featured chat bots for Twitch.  It allows the streamer to a select a Tweet which viewers can retweet and be rewarded automatically with chat currency.
+Missing Link is a tiny bot that suppliments the functionality of other full-featured chat bots for Twitch.  It allows the streamer to a select a Tweet which viewers can retweet and be rewarded automatically with chat currency.
 
 Before viewers can recieve the benefits of this bot, they will have to use the !link command followed by their Twitter name.  For example:
 
 chat_dweller: !link @The_Hot_Twit
+
 CHAT_BOT: Congratulations, chat_dweller, your Twitter handle has been added to the database! You can now earn beers for spreading the good news!
 
 ##Getting Started
