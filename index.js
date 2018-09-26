@@ -1,15 +1,13 @@
 //dependencies
-const config = require('./config/var.js')
-const Twit = require('twit')
-const WebSocketClient = require('websocket').client
+const config = require('./config/var.js');
+const Twit = require('twit');
+const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
-const admin = require('firebase-admin');
-const serviceAccount = require('./config/lushbotcsr-firebase-adminsdk-av3k3-bae2be72c9.json');
 const firebase = require("firebase");
 
 //initialize
 firebase.initializeApp(config.fbConfig)
-const client = new WebSocketClient()
+const ws = new WebSocket('ws://localhost:3337/')
 const T = new Twit(config.twitterConfig)
 const Bot = new TwitchBot({
   username: config.botUserName,
@@ -17,54 +15,41 @@ const Bot = new TwitchBot({
   channels: [config.twitchChannel]
 })
 
-// DeepBot
-client.on('connectFailed', function(error) {
-    console.log('Connect Error: ' + error.toString())
-})
-client.on('connect', function(connection) {
-    console.log('WebSocket Client Connected')
-    connection.on('error', function(error) {
-        console.log("Connection Error: " + error.toString())
-    })
-    connection.on('close', function() {
-        console.log('echo-protocol Connection Closed')
-    })
-    connection.on('message', function(message) {
-        if (message.type === 'utf8') {
-            console.log("Received: '" + message.utf8Data + "'")
-        }
-    })
-    function apiRegister() {
-      if (connection.connected) {
-        connection.sendUTF("api|register|" + config.deepBotSecret)
-      }
-    }
-    function addPoints() {
-      if (connection.connected) {
-        connection.sendUTF("api|add_points|" + config.twitchName + config.pointsToAward)
-      }
-    }  
-    apiRegister()
-    addPoints()
-    Bot.say(config.twitchName + " has been awarded " + config.pointsToAward + " beers!")
-})
-
 // Twitch Bot
+
 Bot.on('error', err => {
   console.log(err)
 })
 Bot.on('join', () => {
   Bot.on('message', chatter => { 
     var someString = chatter.message;
-    var index = someString.indexOf(` `);  // Gets the first index where a space occours
-    var command = someString.substr(0, index); // Gets the first part
-    var params = someString.substr(index + 1);  // Gets the text part       
+    var index = someString.indexOf(` `);  
+    var command = someString.substr(0, index);
+    var params = someString.substr(index + 1);       
     if(command == '!link') {
       writeUserData(chatter.username, params)
       Bot.say(chatter.username + " has been added to the database!  You can now earn " + config.deepBotCurrency + " for spreading the good news!")
     }
+    if(params == '!flex' && chatter.username == "djtangent") {
+      Bot.say("DJ TANGENT IS THE ULTIMATE HACKER")
+    }
   })
 })
+function rewardMessage () {
+  Bot.on('join', () => {
+    Bot.say(config.twitchName + " has been awarded " + config.pointsToAward + " " + config.deepBotCurrency)
+  })
+}
+
+//DeepBot websocket
+function awardPoints () {
+  ws.on('open', function open() {
+    ws.send("api|register|" + config.deepBotSecret)
+    ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward, function(error){
+      console.log(error)
+    })    
+  });
+}
 
 //Twitter bot
 function checkForRetweets(arg){
@@ -72,47 +57,53 @@ function checkForRetweets(arg){
     id: config.retweetID,
     count: 10,
     trim_user: false,
+    stringify_ids: true,
+  }
+  var endpoints = ['statuses/retweets', 'statuses/retweeters/ids', 'users/show']
+  var toggle = function(x){
+    if(x==0)
+      return 1
+    else 
+      return 0
   }
 
-  if(config.rateLimitFlag == 0){
-    T.get('statuses/retweets', params, function(err, data, response){
-      config.rateLimitFlag = 1
-      if(err){
-        console.log(err)
-      }
-      if(config.previousResults.length == data.length) //if there are new reweets, don't iterate
-        return;
-      config.previousResults = data;
-      for(i=0; i < data.length; ++i){
-        searchForMatch(data[i].user.screen_name)
-      }
-    })
-  }else{
-    T.get('statuses/retweeters/ids', params, function(err, data, response){
-      config.rateLimitFlag = 0
-      if(err){
-        console.log(err)
-      }
-      if(config.previousResults.length == data.length) //if there are new reweets, don't iterate
-        return;
-      config.previousResults = data;
-      for(i=0; i < data.length; ++i){
-        searchForMatch(data[i].user.screen_name)
-      }
-    })
-  }
-
-  T.get('application/rate_limit_status', function(err, data, response){
+  T.get(endpoints[config.rateLimitFlag], params, function(err, data, response){
     if(err){
       console.log(err)
-    } else {
-      console.log(data.resources.statuses)
+    }
+    if(data.length != 0){
+      if(config.rateLimitFlag == 0){
+        if(config.previousResults == data[0].user.id){
+          return;
+        } else {
+          for(i=0; i < data.length; ++i){
+            searchForMatch(data[i].user.screen_name)
+          }
+        }
+        config.previousResults = data[0].user.id_str
+      } else {
+        if(config.previousResults == data.ids[0]){
+          return;
+        } else {
+          for(i=0; i < data.ids.length; ++i){
+            T.get(endpoints[2], {"user_id" : data.ids[i]}, function(err, data, response){
+              if(err){
+                console.log(err)
+              } else {
+                searchForMatch(data.screen_name)
+              }
+            })
+          }
+        }
+        config.previousResults = data.ids[0]
+      }
+      config.rateLimitFlag = toggle(config.rateLimitFlag)
     }
   })
 }
 
  //Firebase functions
-function writeUserData(twitchName, twitterName) {
+function writeUserData(twitchName, twitterName) {  //TODO: Check for existing user?  Psh.
   firebase.database().ref('users/'+ twitterName).set({
       twitchID: twitchName,
       twitterID: twitterName,
@@ -129,23 +120,27 @@ function rewardTimestamp(twitterName){
 }
 
 function searchForMatch(twitterName) {
-  var db = firebase.database();
-  var ref = db.ref("users");
+  twitterName = '@' + twitterName
+  var db = firebase.database()
+  var ref = db.ref("users")
   ref.once("value", function (snap) {
     snap.forEach(function (childSnap) {
       var results = childSnap.val();
-      if (results.lastReward < config.sessionStart - config.dayInMs) {
-        config.lastReward = results.lastReward;
-        config.twitchName = results.twitchID;
-        config.twitterName = results.twitterID;
-        client.connect('ws://localhost:3337/');
-        rewardTimestamp(results.twitterID);
+      if(results.twitterID.toLowerCase() == twitterName.toLowerCase()){
+        console.log('yay')
+        if (results.lastReward < config.sessionStart) {
+          config.lastReward = results.lastReward
+          config.twitchName = results.twitchID
+          config.twitterName = results.twitterID
+          awardPoints()
+          rewardMessage()
+          rewardTimestamp(results.twitterID)
+        }
       }
     })
   }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
+    console.log("The read failed: " + errorObject.code)
   });
 }
 
-//execution
 setInterval(function(){checkForRetweets()}, 5000);
