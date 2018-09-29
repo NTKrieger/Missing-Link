@@ -38,6 +38,7 @@ Bot.on('join', () => {
 function rewardMessage () {
   Bot.on('join', () => {
     Bot.say(config.twitchName + " has been awarded " + config.pointsToAward + " " + config.deepBotCurrency)
+    console.log("rewardMessage")
   })
 }
 
@@ -47,7 +48,8 @@ function awardPoints () {
     ws.send("api|register|" + config.deepBotSecret)
     ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward, function(error){
       console.log(error)
-    })    
+    }) 
+    console.log("awardPoints")   
   });
 }
 
@@ -127,14 +129,8 @@ function searchForMatch(twitterName) {
     snap.forEach(function (childSnap) {
       var results = childSnap.val();
       if(results.twitterID.toLowerCase() == twitterName.toLowerCase()){
-        console.log('yay')
-        if (results.lastReward < config.sessionStart) {
-          config.lastReward = results.lastReward
-          config.twitchName = results.twitchID
-          config.twitterName = results.twitterID
-          awardPoints()
-          rewardMessage()
-          rewardTimestamp(results.twitterID)
+        if (results.lastReward < config.sessionStart){
+          scopeTest();
         }
       }
     })
@@ -142,5 +138,12 @@ function searchForMatch(twitterName) {
     console.log("The read failed: " + errorObject.code)
   });
 }
+
+function scopeTest(){
+  awardPoints()
+  rewardMessage()
+}
+
+
 
 setInterval(function(){checkForRetweets()}, 5000);
