@@ -4,16 +4,18 @@ const Twit = require('twit');
 const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
 const firebase = require("firebase");
+const EventEmitter = require('events');
 
 //initialize
 firebase.initializeApp(config.fbConfig)
-const ws = new WebSocket('ws://localhost:3337/')
 const T = new Twit(config.twitterConfig)
 const Bot = new TwitchBot({
   username: config.botUserName,
   oauth: 'oauth:' + config.botChatOAuth,
   channels: [config.twitchChannel]
 })
+class MyEmitter extends EventEmitter {}
+const myEmitter = new MyEmitter();
 
 // Twitch Bot
 
@@ -31,30 +33,28 @@ Bot.on('join', () => {
       Bot.say(chatter.username + " has been added to the database!  You can now earn " + config.deepBotCurrency + " for spreading the good news!")
     }
     if(params == '!flex' && chatter.username == "djtangent") {
-      Bot.say("DJ TANGENT IS THE ULTIMATE HACKER")
+      Bot.say("DJ TANGENT IS THE GREATEST")
     }
   })
 })
-function rewardMessage () {
-  Bot.on('join', () => {
+
+function rewardMessage(){
     Bot.say(config.twitchName + " has been awarded " + config.pointsToAward + " " + config.deepBotCurrency)
     console.log("rewardMessage")
-  })
 }
 
 //DeepBot websocket
-function awardPoints () {
+function awardPoints(){
+  const ws = new WebSocket('ws://127.0.0.1:3337/')
   ws.on('open', function open() {
     ws.send("api|register|" + config.deepBotSecret)
-    ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward, function(error){
-      console.log(error)
-    }) 
+    ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward)
     console.log("awardPoints")   
   });
 }
 
 //Twitter bot
-function checkForRetweets(arg){
+function checkForRetweets(){
   var params = {
     id: config.retweetID,
     count: 10,
@@ -68,7 +68,6 @@ function checkForRetweets(arg){
     else 
       return 0
   }
-
   T.get(endpoints[config.rateLimitFlag], params, function(err, data, response){
     if(err){
       console.log(err)
@@ -104,46 +103,51 @@ function checkForRetweets(arg){
   })
 }
 
- //Firebase functions
-function writeUserData(twitchName, twitterName) {  //TODO: Check for existing user?  Psh.
-  firebase.database().ref('users/'+ twitterName).set({
-      twitchID: twitchName,
-      twitterID: twitterName,
+//Firebase functions
+function writeUserData(twitch, twitter){ 
+  var recordName = twitter.toString().toLowerCase();
+  firebase.database().ref('users/'+ recordName).set({
+      twitchID: twitch,
+      twitterID: twitter.toLowerCase(),
       lastReward: config.lastReward,
   });
 }
 
 function rewardTimestamp(twitterName){
-  firebase.database().ref('users/'+ twitterName).set({
+  firebase.database().ref('users/'+ twitterName.toLowerCase()).set({
     twitchID: config.twitchName,
     twitterID: config.twitterName, 
     lastReward: Date.now(),
   });
+  console.log("rewardTimestamp")
 }
 
-function searchForMatch(twitterName) {
-  twitterName = '@' + twitterName
+function searchForMatch(twitter) {
+  twitterName = twitter.toLowerCase()
   var db = firebase.database()
   var ref = db.ref("users")
   ref.once("value", function (snap) {
     snap.forEach(function (childSnap) {
-      var results = childSnap.val();
-      if(results.twitterID.toLowerCase() == twitterName.toLowerCase()){
-        if (results.lastReward < config.sessionStart){
-          scopeTest();
+      var results = childSnap.val()
+      if(results.twitterID == twitterName){
+        if(results.lastReward < config.sessionStart){
+            config.twitchName = results.twitchID
+            config.twitterName = results.twitterID
+            myEmitter.emit('event', twitterName)
         }
       }
     })
-  }, function (errorObject) {
+  },function (errorObject) {
     console.log("The read failed: " + errorObject.code)
   });
 }
 
-function scopeTest(){
-  awardPoints()
+//following confirmed match
+myEmitter.on('event', (twitterName) => {
   rewardMessage()
-}
-
-
+  awardPoints()
+  rewardTimestamp(twitterName)
+});
 
 setInterval(function(){checkForRetweets()}, 5000);
+

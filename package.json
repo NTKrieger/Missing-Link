@@ -17,8 +17,8 @@
     "firebase-admin": "^6.0.0",
     "twit": "^2.2.11",
     "twitch-bot": "^1.2.5",
-    "websocket": "^1.0.26",
+    "websocket": "^1.0.28",
     "websocket-node": "^0.1.0",
-    "ws": "^6.0.0"
+    "ws": "^6.1.0"
   }
 }
