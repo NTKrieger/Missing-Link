@@ -1,5 +1,5 @@
 //dependencies
-const config = require('./config/var.js');
+const config = require('./config/data.json');
 const Twit = require('twit');
 const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
@@ -12,13 +12,19 @@ const T = new Twit(config.twitterConfig)
 const Bot = new TwitchBot({
   username: config.botUserName,
   oauth: 'oauth:' + config.botChatOAuth,
-  channels: [config.twitchChannel]
+  channels: ['#' + config.twitchUserName]
 })
+
+//event system
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
+myEmitter.on('event', (twitterName) => {
+  rewardMessage()
+  awardPoints()
+  rewardTimestamp(twitterName)
+});
 
 // Twitch Bot
-
 Bot.on('error', err => {
   console.log(err)
 })
@@ -35,12 +41,17 @@ Bot.on('join', () => {
     if(params == '!flex' && chatter.username == "djtangent") {
       Bot.say("DJ TANGENT IS THE GREATEST")
     }
+    if(params == '!MLregister' && chatter.username == config.twitchUserName){
+      Bot.say("Welcome to Missing Link!  To register for rewards in this channel, type '!link' followed by a space and then your Twitter handle.")
+    }
+    if(params == '!MLinfo' && chatter.username == config.twitchUserName){
+      Bot.say("Retweet me to earn " + config.pointsToAward + " " + config.deepBotCurrency + "! " + "www.twitter.com/LushIsDrunk/statuses/" + config.retweetID)
+    }
   })
 })
 
 function rewardMessage(){
     Bot.say(config.twitchName + " has been awarded " + config.pointsToAward + " " + config.deepBotCurrency)
-    console.log("rewardMessage")
 }
 
 //DeepBot websocket
@@ -48,8 +59,7 @@ function awardPoints(){
   const ws = new WebSocket('ws://127.0.0.1:3337/')
   ws.on('open', function open() {
     ws.send("api|register|" + config.deepBotSecret)
-    ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward)
-    console.log("awardPoints")   
+    ws.send("api|add_points|" + config.twitchName + "|" + config.pointsToAward) 
   });
 }
 
@@ -119,7 +129,6 @@ function rewardTimestamp(twitterName){
     twitterID: config.twitterName, 
     lastReward: Date.now(),
   });
-  console.log("rewardTimestamp")
 }
 
 function searchForMatch(twitter) {
@@ -142,12 +151,4 @@ function searchForMatch(twitter) {
   });
 }
 
-//following confirmed match
-myEmitter.on('event', (twitterName) => {
-  rewardMessage()
-  awardPoints()
-  rewardTimestamp(twitterName)
-});
-
-setInterval(function(){checkForRetweets()}, 5000);
-
+setInterval(()=>{checkForRetweets()}, 5000);
