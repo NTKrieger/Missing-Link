@@ -1,8 +1,9 @@
 body{
     font-family: 'Roboto', sans-serif;
+    margin-left: 5%;
 }
 header{
-    text-align: center;
+    text-align: left;
     font-size: 28px;
     padding: 10px;
     padding-bottom: 0px;
@@ -36,25 +37,25 @@ h2{
     border-style: solid;
     border-radius: 5px;
     padding: 5px;
-    width: 300px;
+    width: 22%;
     display: inline-block;
 }
 .submit-button{
-    background-color: darkcyan;
+    background-color: #cccccc;
     padding: 15px 32PX;
     text-align: center;
     display: block;
     border: 5px black solid;
     border-radius: 20px;
     font-size: 16px;
-    position: relative;
-    left: 180px;
-    top: 100px;
+    position: absolute;
+    margin-top:20px;
+    margin-left: 10px;
     font-weight: bold;
 }
 .submit-button:hover{
     border: 5px darkcyan solid;
-    background-color: darkturquoise;
+    background-color: orange;
     color: white;
     font-weight: bold;
 }
