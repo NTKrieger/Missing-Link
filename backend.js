@@ -128,20 +128,6 @@ function checkForRetweets(){
   })
 }
 
-//search for match
-/* function searchForMatch(twitterID){
-  let results = readUserRecord(twitterID.toLowerCase());
-  if(typeof results === "undefined"){
-    return console.error("no matches")
-  }else{
-    if(results.reward_Timestamp < config.sessionStart){
-      config.twitchName = results.twitchID
-      config.twitterName = results.twitterID
-      myEmitter.emit('event', results.twitchID)
-    }
-  }
-}
- */
 //get user record from twitterID
 function searchForMatch(twitterID){
   db.serialize(()=>{
@@ -164,26 +150,13 @@ function searchForMatch(twitterID){
   })
 }
 
-function readUserRecord(twitterID){
-  db.serialize(()=>{
-      let sql = "SELECT * FROM users WHERE twitterID = '" + twitterID + "'";
-      db.get(sql ,(err, row) => {
-          if (err){
-              return console.error(err)
-          }
-          console.log(row)
-          return row            
-      })
-  })
-}
-
 //write a new user to the database
 function writeNewUser(twitchID, twitterID){  
   db.serialize(()=>{
       let sql = "INSERT INTO users(twitchID, twitterID) VALUES(" + "'" + twitchID + "'" + ", '"  + twitterID + "')"
       db.run(sql, (err)=>{
           if (err){
-            console.error(err)
+            updateTwitterID(twitchID, twitterID)
           }
       })
    })
@@ -208,6 +181,5 @@ function updateTwitterID(twitchID, newTwitterID){
       })
    })
 }
-
 
 setInterval(()=>{checkForRetweets()}, 5000);
