@@ -3,25 +3,40 @@ const config = require('./config/data.json');
 const Twit = require('twit');
 const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
-const firebase = require("firebase");
 const EventEmitter = require('events');
+const sqlite3 = require('sqlite3').verbose();
 
-//initialize
-firebase.initializeApp(config.fbConfig)
-const T = new Twit(config.twitterConfig)
+//initialize twitter connection, chatbot, database
+const twitterConfig = {
+  consumer_key: config.consumer_key,
+  consumer_secret: config.consumer_secret,
+  access_token: config.access_token,
+  access_token_secret: config. access_token_secret,
+}
+const T = new Twit(twitterConfig)
 const Bot = new TwitchBot({
   username: config.botUserName,
   oauth: 'oauth:' + config.botChatOAuth,
   channels: ['#' + config.twitchUserName]
 })
+let db = new sqlite3.Database('./users.db', (err) => {
+  if (err) {
+      return console.error(err.message);
+  }
+  console.log('Connected to the SQlite database.');
+});
+db.serialize(()=>{
+  let sql = "CREATE TABLE IF NOT EXISTS users(twitchID TEXT PRIMARY KEY NOT NULL UNIQUE, twitterID TEXT NOT NULL UNIQUE, reward_Timestamp INTEGER)"
+  db.run(sql)
+})
 
 //event system
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
-myEmitter.on('event', (twitterName) => {
+myEmitter.on('event', (twitchID) => {
   rewardMessage()
   awardPoints()
-  rewardTimestamp(twitterName)
+  updateTimestamp(twitchID)
 });
 
 // Twitch Bot
@@ -35,7 +50,7 @@ Bot.on('join', () => {
     var command = someString.substr(0, index);
     var params = someString.substr(index + 1);       
     if(command == '!link') {
-      writeUserData(chatter.username, params)
+      writeNewUser(chatter.username, params) //TODO:  WRITE IN CALLBACK TO CHECK FOR EXISTING RECORD THEN UPDATE IF NEEDED
       Bot.say(chatter.username + " has been added to the database!  You can now earn " + config.deepBotCurrency + " for spreading the good news!")
     }
     if(params == '!flex' && chatter.username == "djtangent") {
@@ -113,42 +128,86 @@ function checkForRetweets(){
   })
 }
 
-//Firebase functions
-function writeUserData(twitch, twitter){ 
-  var recordName = twitter.toString().toLowerCase();
-  firebase.database().ref('users/'+ recordName).set({
-      twitchID: twitch,
-      twitterID: twitter.toLowerCase(),
-      lastReward: config.lastReward,
-  });
+//search for match
+/* function searchForMatch(twitterID){
+  let results = readUserRecord(twitterID.toLowerCase());
+  if(typeof results === "undefined"){
+    return console.error("no matches")
+  }else{
+    if(results.reward_Timestamp < config.sessionStart){
+      config.twitchName = results.twitchID
+      config.twitterName = results.twitterID
+      myEmitter.emit('event', results.twitchID)
+    }
+  }
+}
+ */
+//get user record from twitterID
+function searchForMatch(twitterID){
+  db.serialize(()=>{
+      let sql = "SELECT * FROM users WHERE twitterID = '" + twitterID.toLowerCase() + "'";
+      db.get(sql ,(err, row) => {
+          if (err){
+            return console.error(err)
+          }
+          let results = row
+          if(typeof results === "undefined"){
+            return console.error("no matches")
+          }else{
+            if(results.reward_Timestamp < config.sessionStart){
+              config.twitchName = results.twitchID
+              config.twitterName = results.twitterID
+              myEmitter.emit('event', results.twitchID)
+            }
+          }                   
+      })
+  })
 }
 
-function rewardTimestamp(twitterName){
-  firebase.database().ref('users/'+ twitterName.toLowerCase()).set({
-    twitchID: config.twitchName,
-    twitterID: config.twitterName, 
-    lastReward: Date.now(),
-  });
+function readUserRecord(twitterID){
+  db.serialize(()=>{
+      let sql = "SELECT * FROM users WHERE twitterID = '" + twitterID + "'";
+      db.get(sql ,(err, row) => {
+          if (err){
+              return console.error(err)
+          }
+          console.log(row)
+          return row            
+      })
+  })
 }
 
-function searchForMatch(twitter) {
-  twitterName = twitter.toLowerCase()
-  var db = firebase.database()
-  var ref = db.ref("users")
-  ref.once("value", function (snap) {
-    snap.forEach(function (childSnap) {
-      var results = childSnap.val()
-      if(results.twitterID == twitterName){
-        if(results.lastReward < config.sessionStart){
-            config.twitchName = results.twitchID
-            config.twitterName = results.twitterID
-            myEmitter.emit('event', twitterName)
-        }
-      }
-    })
-  },function (errorObject) {
-    console.log("The read failed: " + errorObject.code)
-  });
+//write a new user to the database
+function writeNewUser(twitchID, twitterID){  
+  db.serialize(()=>{
+      let sql = "INSERT INTO users(twitchID, twitterID) VALUES(" + "'" + twitchID + "'" + ", '"  + twitterID + "')"
+      db.run(sql, (err)=>{
+          if (err){
+            console.error(err)
+          }
+      })
+   })
 }
+
+//update reward timestamp
+function updateTimestamp(twitchID){
+  db.serialize(()=>{
+      let sql = "UPDATE users SET reward_Timestamp = '" + Date.now() + "' WHERE twitchID = '" + twitchID + "'"
+      db.run(sql, (err) =>{
+          return console.error(err)
+      })
+   })
+}
+
+//update user record
+function updateTwitterID(twitchID, newTwitterID){
+  db.serialize(()=>{
+      let sql = "UPDATE users SET twitterID = '" + newTwitterID + "' WHERE twitchID = '" + twitchID + "'"
+      db.run(sql, (err) =>{
+          return console.error(err)
+      })
+   })
+}
+
 
 setInterval(()=>{checkForRetweets()}, 5000);

@@ -15,9 +15,9 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "firebase": "^5.5.0",
     "firebase-admin": "^6.0.0",
     "opn": "^5.4.0",
+    "sqlite3": "^4.0.3",
     "twit": "^2.2.11",
     "twitch-bot": "^1.2.5",
     "websocket": "^1.0.28",

@@ -30,27 +30,20 @@ server.post("/data", (req, res, next) => {
         "consumer_secret": req.body.consumer_secret,
         "access_token": req.body.access_token,
         "access_token_secret": req.body.access_token_secret,
-        "fbConfig": {
-            "apiKey": "AIzaSyAgpIqtUQyTRbgRDiE6vaB94j3YalAUyO0",
-            "authDomain": "lushbotcsr.firebaseapp.com",
-            "databaseURL": "https://lushbotcsr.firebaseio.com",
-            "projectId": "lushbotcsr",
-            "storageBucket": "lushbotcsr.appspot.com",
-            "messagingSenderId": "742128681937"
-        },
         "twitchName": "",
         "twitterName": "",
         "lastReward": "",
         "previousResults": "",
-        "sessionStart": "",
-        "rateLimitFlag": "",
+        "sessionStart": Date.now(),
+        "rateLimitFlag": 0,
     }
-    fs.writeFile("./config/data.json", JSON.stringify(newDataObject), (err)=>{
+    fs.writeFileSync("./config/data.json", JSON.stringify(newDataObject), (err)=>{
         if (err) throw err
-        console.log("Saved!")
+        console.log("Saved!") 
     })
-    res.send({"status": 200, "data" : "wooooo"} )
+    res.send({"status": 200, "data" : "awww YEAH!"})
     res.end("yes")
+    opn('./backend.js')
 })
 
 server.listen(3000, () => {
