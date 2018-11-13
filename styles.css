@@ -1,76 +1,87 @@
 body{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Arial', sans-serif;
     margin-left: 5%;
 }
 header{
-    text-align: left;
-    font-size: 28px;
-    padding: 10px;
+    margin-top: 20px;
+	text-align: left;
+    font-size: 14px;
+    padding: 0px;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
 h1{
     margin: 0px;
-    padding: 0px;
+    padding: 5px;
+	color: #ff80b3;
 }
 h2{
-    margin-top: 5px;
-    margin-bottom: 40px;
-    text-align: center;
+    margin: 5px;
+	margin-top: 0px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    text-align: left;
 }
 .form-label{
-    text-align: center;
+    text-align: left;
     margin: 5px;
+    font-size: 14px;
+	padding: 0px;
 }
 .form-textfield{
-    border-style: solid;
-    border-radius: 5px;
+    font-size: 12px;
+	border-style: solid;
+    border-width: 1px;
+	border-radius: 0px;
     height: 30px;
     width: 95%;
     margin-top: 0px;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
     margin-left: 5px;
     margin-right: 10px;
     text-indent: 5px;
 }
 .form-group{
     border-style: solid;
-    border-radius: 5px;
+ 	border-width: 1px;
+	border-radius: 0px;
     padding: 5px;
-    width: 22%;
-    display: inline-block;
+    width: 66%;
+	display: block;
 }
 .submit-button{
-    background-color: #cccccc;
-    padding: 15px 32PX;
-    text-align: center;
-    display: block;
-    border: 5px black solid;
-    border-radius: 20px;
-    font-size: 16px;
-    position: absolute;
-    margin-top:20px;
-    margin-left: 10px;
-    font-weight: bold;
+	background-color: white;
+	padding: 10px 32PX;
+	text-align: center;
+	display: block;
+	border: 1px black solid;
+	border-radius: 0px;
+	font-size: 12px;
+	position: static;
+	margin-top: 20px;
+	margin-left: 0px;
+	font-weight: bold;
+	left: 0px;
+	top: 0px;
 }
 .submit-button:hover{
-    border: 5px darkcyan solid;
-    background-color: orange;
-    color: white;
+    border: 1px black solid;
+    background-color: #3399ff;
+    color: black;
     font-weight: bold;
 }
 .submit-button:active{
-    color: yellow;
+    color: #ff80b3;
 }
 #session-settings{
-    background-color: cyan;
+    background-color: #66cc66;
 }
 #deepBot-settings{
-    background-color: chartreuse;
+    background-color: #66cc66;
 }
 #twitch-settings{
-    background-color: yellow;
+    background-color: #66cc66;
 }
 #twitter-settings{
-    background-color: red;
+    background-color: #66cc66;
 }
