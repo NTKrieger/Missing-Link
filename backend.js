@@ -4,6 +4,7 @@ const Twit = require('twit');
 const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
 const EventEmitter = require('events');
+var opn = require('opn');
 const sqlite3 = require('sqlite3').verbose();
 
 //initialize twitter connection, chatbot, database
@@ -50,7 +51,7 @@ Bot.on('join', () => {
     var command = someString.substr(0, index);
     var params = someString.substr(index + 1);       
     if(command == '!link') {
-      writeNewUser(chatter.username, params) //TODO:  WRITE IN CALLBACK TO CHECK FOR EXISTING RECORD THEN UPDATE IF NEEDED
+      writeNewUser(chatter.username, params)
       Bot.say(chatter.username + " has been added to the database!  You can now earn " + config.deepBotCurrency + " for spreading the good news!")
     }
     if(params == '!flex' && chatter.username == "djtangent") {
@@ -182,4 +183,5 @@ function updateTwitterID(twitchID, newTwitterID){
    })
 }
 
+opn('./test.html')
 setInterval(()=>{checkForRetweets()}, 5000);

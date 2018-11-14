@@ -43,7 +43,7 @@ server.post("/data", (req, res, next) => {
     })
     res.send({"status": 200, "data" : "awww YEAH!"})
     res.end("yes")
-    opn('./backend.js')
+    opn('./backend.js', {app: 'node'})
 })
 
 server.listen(3000, () => {
