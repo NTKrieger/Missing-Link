@@ -1,7 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var fs = require("fs");
-var config = require("./config/data.json");
+var config = require("./data/data.json");
 var opn = require('opn');
 var server = express();
 
@@ -37,7 +37,7 @@ server.post("/data", (req, res, next) => {
         "sessionStart": Date.now(),
         "rateLimitFlag": 0,
     }
-    fs.writeFileSync("./config/data.json", JSON.stringify(newDataObject), (err)=>{
+    fs.writeFileSync("./data/data.json", JSON.stringify(newDataObject), (err)=>{
         if (err) throw err
         console.log("Saved!") 
     })

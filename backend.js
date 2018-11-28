@@ -1,10 +1,9 @@
 //dependencies
-const config = require('./config/data.json');
+const config = require('./data/data.json');
 const Twit = require('twit');
 const WebSocket = require('ws');
 const TwitchBot = require('twitch-bot');
 const EventEmitter = require('events');
-var opn = require('opn');
 const sqlite3 = require('sqlite3').verbose();
 
 //initialize twitter connection, chatbot, database
@@ -20,7 +19,7 @@ const Bot = new TwitchBot({
   oauth: 'oauth:' + config.botChatOAuth,
   channels: ['#' + config.twitchUserName]
 })
-let db = new sqlite3.Database('./users.db', (err) => {
+let db = new sqlite3.Database('./ data/users.db', (err) => {
   if (err) {
       return console.error(err.message);
   }
@@ -183,5 +182,4 @@ function updateTwitterID(twitchID, newTwitterID){
    })
 }
 
-opn('./test.html')
 setInterval(()=>{checkForRetweets()}, 5000);
