@@ -26,13 +26,13 @@ $(()=>{
                 "retweetID" : $("#retweetID").val(),
                 "twitchUserName": $("#twitchUserName").val(),
                 "botUserName": $("#botUserName").val(),
-                "botChatOAuth":  $("#botChatOAuth").val(),
+                "botChatOAuth": $("#botChatOAuth").val(),
                 "deepBotSecret": $("#deepBotSecret").val(),
                 "deepBotCurrency":  $("#deepBotCurrency").val(),                                        
                 "consumer_key":  $("#twitter_consumer_key").val(),
                 "consumer_secret": $("#twitter_consumer_secret").val(),
-                "access_token":  $("#twitter_access_token").val(),
-                "access_token_secret":  $("#twitter_access_token_secret").val()
+                "access_token": $("#twitter_access_token").val(),
+                "access_token_secret": $("#twitter_access_token_secret").val()
             }
             $.post("http://localhost:3000/data", updatedData , (data, status) => {
                 alert(JSON.stringify(data))

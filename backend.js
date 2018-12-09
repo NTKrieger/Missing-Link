@@ -19,7 +19,7 @@ const Bot = new TwitchBot({
   oauth: 'oauth:' + config.botChatOAuth,
   channels: ['#' + config.twitchUserName]
 })
-let db = new sqlite3.Database('./ data/users.db', (err) => {
+let db = new sqlite3.Database('./data/users.db', (err) => {
   if (err) {
       return console.error(err.message);
   }
