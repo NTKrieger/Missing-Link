@@ -1,12 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const child = require('child_process')
-var exec = require('child_process').exec
+const exec = require('child_process').exec
 const opn = require('opn');
-const globals = require('./data/var.js')
 const sqlite3 = require('sqlite3').verbose();
-const server = express();
 const URL = require('url').URL;
+const server = express();
+let globals = {
+    settingsString: "none",
+    settingsProfile: 0,
+}
 
 //initialize db and server, load settings, launch server, open UI
 let db = new sqlite3.Database('./data/users.db', (err) => {
@@ -68,8 +71,9 @@ function loadSettings(){
 }
 
 //services
-server.get("/data", (req, res) => {
-    res.send(JSON.parse(globals.settingsString))
+server.get("/data", (req, res) =>{
+    if(globals.settingsString != "none")
+        res.send(JSON.parse(globals.settingsString))
 })
 
 server.get("/restart", (req, res) => {
@@ -100,8 +104,8 @@ server.post("/data", (req, res, next) => {
     }
     saveSettings(globals.settingsProfile, newDataObject)
     childchild_process.fork("./backend.js")
-    res.send({"status": 200, "data" : "awww YEAH!"})
-    res.end("yes") //????
+    res.send({"status": 200, "data" : "awwwYEAH!"})
+    res.end("yes")
 })
 
 //url parsers
