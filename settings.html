@@ -8,67 +8,62 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     </head>
     <body>
-
-    <header>
-           	
-         <img src="images/linklogo" alt="logo"/>
-			
-    </header>
-
-    <form>
-
+        <header>         
+            <img src="images/linklogo" alt="logo"/>       
+        </header>
+        <form id="form">
             <div class="form-group" id="session-settings">
               <h2 id="session-settings-header">Settings</h2>
                 <p class="form-label">Points to Award for a Retweet</p>
-                <input class="form-textfield" id="pointsToAward" type="number">
+                <input class="form-textfield" id="pointsToAward" type="number" required>
 
                 <p class="form-label">URL of Tweet to be Retweeted</p>
-                <input class="form-textfield" id="retweetID" type="number">
+                <input class="form-textfield" id="retweetURL" type="url" required>
             </div>
 
             <div class="form-group" id="deepBot-settings">
                 <h2 id="deepBot-settings-header">DeepBot</h2>
 
                 <p class="form-label">DeepBot Currency Name</p>
-                <input class="form-textfield" id="deepBotCurrency" type="text">
+                <input class="form-textfield" id="deepBotCurrency" type="text" required>
 
                 <p class="form-label">DeepBot Secret</p>
-                <input class="form-textfield" id="deepBotSecret" type="text">
+                <input class="form-textfield" id="deepBotSecret" type="text" required>
             </div>
 
             <div class="form-group" id="twitch-settings">
                 <h2 id="twitch-settings-header">Twitch</h2>
 
                 <p class="form-label">Twitch Username</p>
-                <input class="form-textfield" id="twitchUserName" type="text">
+                <input class="form-textfield" id="twitchUserName" type="text" required>
 
                 <p class="form-label">Twitch Bot Username</p>
-                <input class="form-textfield" id="botUserName" type="text">
+                <input class="form-textfield" id="botUserName" type="text" required>
 
                 <p class="form-label">Twitch Chatbot Token</p>
-                <input class="form-textfield" id="botChatOAuth" type="text">
+                <input class="form-textfield" id="botChatOAuth" type="text" required>
             </div>
 
             <div class="form-group" id="twitter-settings">
                 <h2 id="twitter-settings-header">Twitter</h2>
 
-                <p class="form-label">Twitter Consumer Key </p>
-                <input class="form-textfield" id="twitter_consumer_key" type="text">
+                <p class="form-label">Twitter Consumer Key</p>
+                <input class="form-textfield" id="twitter_consumer_key" type="text" required>
 
-                <p class="form-label">Twitter Consumer Secret </p>
-                <input class="form-textfield" id="twitter_consumer_secret" type="text">
+                <p class="form-label">Twitter Consumer Secret</p>
+                <input class="form-textfield" id="twitter_consumer_secret" type="text" required>
 
-                <p class="form-label">Twitter Access Token </p>
-                <input class="form-textfield" id="twitter_access_token" type="text">
+                <p class="form-label">Twitter Access Token</p>
+                <input class="form-textfield" id="twitter_access_token" type="text" required>
 
-                <p class="form-label">Twitter Token Secret </p>
-                <input class="form-textfield" id="twitter_access_token_secret" type="text">
+                <p class="form-label">Twitter Token Secret</p>
+                <input class="form-textfield" id="twitter_access_token_secret" type="text" required>
             </div>
-            <input type="submit" class="submit-button" value="Confirm Settings and Launch">
+            <input type="submit" id="submit-button" class="button" value="Confirm Settings and Launch">
 
         </form>
-      </body>
-      <footer>
-        <p>&copy; 2018 Missing Link | n.t.krieger@gmail.com | Tiny Twitch Bot</p>
-      </footer>
+        <footer>
+                <p>&copy; 2018 Missing Link | n.t.krieger@gmail.com</p>
+        </footer>
+      </body>    
 </html>

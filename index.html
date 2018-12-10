@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Missing Link</title>
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="client.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+    </head>
+    <body>
+        <header>   	
+            <img src="images/linklogo" alt="logo"/>		
+        </header>
+        <div class="info-page-container">
+
+            <div class="donation-pitch">
+                <p>Please consider donating to this project, I worked very hard!</p>
+            </div>
+
+            <div class="command-list">
+                <h1 id="command-header">Commands</h1>
+                
+                <div class="command" id="command1">
+                    <h3 class="command-name">!Link</h3>
+                    <p class="command-description">This command will link the Twitch account and the Twitter account together in the Missing Link database.  Each user will only need to complete this process once.  If the user makes a typo or would like to change their associated Twitter account, they can use the command again and it will overwrite the previous data.  Each Twitch user can link only one Twitter account and will only rewarded once per session to prevent abuse.</p>        
+                </div>
+
+                <div class="command" id="command2">
+                    <h3 class="command-name">!MLRegister</h3>
+                    <p class="command-description">Your chatbot will instruct your explain to the chat how to link their Twitter handle to their Twitch account to be eligible for rewards.  This command is only available to the streamer.</p>  
+                </div>
+
+                <div class="command" id="command3">
+                        <h3 class="command-name">!MLInfo</h3>
+                        <p class="command-description">Your chatbot will invite your viewers to retweet your chosen Tweet and advertise the amount of points to be rewarded for doing so.  This command is only available to the streamer.</p>
+            </div>
+
+            </div>
+                <div class="button-container">
+                    <button class="button" id="close-button">End Session</button>
+                    <button class="button" id="restart-button">Start New Session</button>
+                    <button class="button" id="donate-button">Donate</button>
+                </div>
+            </div>
+        </div>    
+        <footer>
+                <p>&copy; 2018 Missing Link | n.t.krieger@gmail.com</p>
+        </footer>
+    </body>

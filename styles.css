@@ -22,6 +22,60 @@ h2{
     font-size: 18px;
     text-align: left;
 }
+footer{
+    margin-top: 45px;
+    text-align: center;
+}
+#command-header{
+    text-align: center;
+    display: block;
+    padding-bottom: 20px;
+    border-bottom: solid 1px black;
+    margin-left: 0px;
+}
+.command{
+    padding-bottom: 10px;
+    display: block;
+}
+#command1, #command2{
+    border-bottom: solid 1px black;
+}
+.command-list{
+    position: relative;
+    left: 20%;
+    right: 20%;
+    width: 60%;
+}
+.command-description{
+    display: block;
+}
+.command-name{
+    text-align: center;
+    display: block;
+    margin-left: 0px;
+}
+.button-container{
+    position: relative;
+    left: 20%;
+    right: 20%;
+    width: 60%;
+}
+#close-button, #restart-button, #donate-button{
+    text-align: center;
+    position: relative;
+    margin: 1%;
+    width: 30%;
+    display: inline-block;
+    position: relative;
+    margin-left: 3px;
+}
+.donation-pitch{
+    position: relative;
+    text-align: center;
+    left: 20%;
+    right: 20%;
+    width: 60%;
+}
 .form-label{
     text-align: left;
     margin: 5px;
@@ -49,7 +103,7 @@ h2{
     width: 66%;
 	display: block;
 }
-.submit-button{
+.button{
 	background-color: white;
 	padding: 10px 32PX;
 	text-align: center;
@@ -64,13 +118,13 @@ h2{
 	left: 0px;
 	top: 0px;
 }
-.submit-button:hover{
+.button:hover{
     border: 1px black solid;
     background-color: #3399ff;
     color: black;
     font-weight: bold;
 }
-.submit-button:active{
+.button:active{
     color: #ff80b3;
 }
 #session-settings{
