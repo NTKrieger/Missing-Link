@@ -9,20 +9,22 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Backend",
-            "program": "${workspaceFolder}\\backend.js"
+            "program": "${workspaceFolder}\\backend.js",
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Server",
             "program": "${workspaceFolder}\\server.js",
-            "autoAttachChildProcesses": true
+            "autoAttachChildProcesses": true,
+            "outputCapture": "std"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Run Tests",
-            "program": "${workspaceFolder}/test/test.js"
+            "program": "${workspaceFolder}/test/test.js",
+            "outputCapture": "std"
         }
     ]
 }

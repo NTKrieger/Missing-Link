@@ -6,10 +6,19 @@ const opn = require('opn');
 const sqlite3 = require('sqlite3').verbose();
 const URL = require('url').URL;
 const server = express();
+const winston = require('winston')
 let globals = {
     settingsString: "none",
     settingsProfile: 0,
 }
+
+//configure logging
+winston.configure({
+    transports:[
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: './logs/testlog.log', handleExceptions: true}),
+    ]
+})
 
 //initialize db and server, load settings, launch server, open UI
 let db = new sqlite3.Database('./data/users.db', (err) => {
@@ -39,36 +48,10 @@ server.listen(30000, () => {
     console.log("Server running on port 3000")
 })
 
+//execution
+winston.info('server.js ran')
 loadSettings()
 opn('./settings.html')
-
-//db functions
-function saveSettings(profile, data){  
-    db.serialize(()=>{
-        let sql = "INSERT OR REPLACE INTO settings(profile, data) VALUES(" + "'" + profile + "'" + ", '"  + JSON.stringify(data) + "')"
-        db.run(sql, (err)=>{
-            if (err){
-              console.log(err)
-            }
-        })
-    })
-}
-
-function loadSettings(){
-    db.serialize(()=>{
-        let sql = "SELECT * FROM settings"
-        db.get(sql ,(err, row) => {
-            if (err){
-                return console.error(err)
-            }
-            if(typeof row === "undefined"){
-                return console.log("no saved settings")
-            }else{
-                globals.settingsString = row.data
-            }                   
-        })
-    })
-}
 
 //services
 server.get("/data", (req, res) =>{
@@ -103,10 +86,38 @@ server.post("/data", (req, res, next) => {
         "sessionStart": Date.now(),
     }
     saveSettings(globals.settingsProfile, newDataObject)
-    childchild_process.fork("./backend.js")
+    opn('backend.js', {app: 'node'})
+    winston.info('tried to open backend.js from server.js')
     res.send({"status": 200, "data" : "awwwYEAH!"})
     res.end("yes")
 })
+
+//db functions
+function saveSettings(profile, data){  
+    db.serialize(()=>{
+        let sql = "INSERT OR REPLACE INTO settings(profile, data) VALUES(" + "'" + profile + "'" + ", '"  + JSON.stringify(data) + "')"
+        db.run(sql, (err)=>{
+            if (err){
+              console.log(err)
+            }
+        })
+    })
+}
+function loadSettings(){
+    db.serialize(()=>{
+        let sql = "SELECT * FROM settings"
+        db.get(sql ,(err, row) => {
+            if (err){
+                return console.error(err)
+            }
+            if(typeof row === "undefined"){
+                return console.log("no saved settings")
+            }else{
+                globals.settingsString = row.data
+            }                   
+        })
+    })
+}
 
 //url parsers
 function getSnowflakeFromURL(urlString){
