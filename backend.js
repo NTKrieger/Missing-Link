@@ -68,7 +68,7 @@ db.serialize(()=>{
           if(command == '!Link'){
             writeNewUser(chatter.username, params)
             Bot.say(chatter.username + " has been added to the database!  You can now earn " + globals.config.deepBotCurrency + " for spreading the good news!")
-          }
+          } 
           if(command == '!MLtest'){
             awardPointsCommand(params)
             Bot.say(params + " has been awarded" + globals.config.pointsToAward + " " + globals.config.deepBotCurrency)

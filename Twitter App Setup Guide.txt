@@ -1,0 +1,53 @@
+Step-by-Step Guide to Registering a Twitter Application
+
+1.  First you need to register for a Twitter developer acocunt.  
+	Navigate to dev.twitter.com and Sign In using button in the upper right corner.  
+	Login with the Twitter account you'd like to associate with Missing Link.
+	
+2.  Click the Apply button in the upper-right hand corner.
+
+3.  Click the 'Apply for a developer account' button. 
+    (If you haven't already, you'll be asked to bind your account to a phone number.)
+
+4.	Click 'Continue' to associate your current Twitter account with your developer account.
+
+5.	Select the 'I am requesting access for my own personal use' radio button and name your developer account.  
+	I would use the same name as the Twitter account to keep things simple.  
+	Select your primary country of operation and press 'Continue'.
+	
+6.	Select the 'Chatbots and automation' use case from the list.
+
+7.  You will be asked to describe in your own words what you will be building and answer four questions.
+	Copy and paste the text provided below:
+	
+	1. I am using the Twitter API to check for retweets of my content in order to automate chat rewards on Twitch.
+	2. I am checking retweet ID's against my user list to reward viewers.
+	3. This application will not post any content to Twitter.
+	4. Viewers of my Twitch channel will be rewarded for retweeting my content once they register with my application.
+
+8.  Let Twitter know that you're not sharing it's API with any governments and hit 'Continue'.
+
+9.  Read and accept the Terms of Service and click 'Submit application'.
+
+10. Verify your email address.  You now the proud owner of a Twitter dev account.  Now it's time to register the app and get the keys.
+
+11. Click the 'Apps' button in the top right, then click 'Create an app'.
+
+12. You can name the app whatever you'd like, it doesn't matter.  For example, I used "Nate's Missing Link".  
+	Enter the text for the application description:
+
+		"Missing Link is a third-party application which adds Twitter functionality to DeepBot, a popular Twitch chatbot."
+		
+13.	A Website URL is required.  Use https://github.com/OmegaNix/Missing-Link.  Click the "Enable Sign in with Twitter checkbox.
+	In the Callback URL's field, I just use "https://www.google.com" because this application doesn't make any OAuth callbacks.  You can use the following text 
+	to fill the text area labeled "Tell us how this app will be used":
+	
+	"Missing Link is a third-party application which adds Twitter functionality to DeepBot,
+	a popular Twitch chatbot.  It allows the streamer to a select a Tweet which viewers can 
+	retweet and be rewarded automatically with chatroom currency, extending their social media 
+	visibility and attracting new users to the channel."
+
+14. Click the 'Create' button at the bottom of the screen.  Review the terms and click 'Create' again.
+
+15. Congratulations.  You have registered a Twitter app.  Click the "Keys and Tokens" tab, then click "Create" under
+	"Access token & access token secret" to get your credentials.  You can now copy and paste the four keys for your Twitter app into the Missing Link web form.
