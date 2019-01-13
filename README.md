@@ -12,7 +12,7 @@ In order for this program to do anything for you at all, you will need to be a p
 
 The first thing you will need to do is install Node.js.  Navigate to https://nodejs.org/en/download/ and choose the correct build for your operating system.  The download and installation should be quick and easy.
 
-Next, you will need to register a Twitter application for your account to give Missing Link permission to monitor your Twitter account.  STEP BY STEP GUIDE COMING SOON.
+Next, you will need to register a Twitter application for your account to give Missing Link permission to monitor your Twitter account.  If you already have Twitter developer account and are familiar with the process, great.  If not, see the Twitter App Setup Guide text file in the root directory for detailed and (I hope) easy-to-follow instructions.
 
 Finally, please download a copy of Missing Link and extract it to C:\Missing-Link.  If you choose another location, you will need to take a moment to update the file path in shortcut.  You can do this by opening the run.bat file with a text editor and changing the file path to your preferred location.
 
