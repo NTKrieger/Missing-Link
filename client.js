@@ -51,7 +51,7 @@ $(document).ready(function() {
     })
     //donate button handler
     $("#donate-button").click(()=>{
-        //do something
+        alert("coming soon")
     })
 });
 
