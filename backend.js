@@ -77,6 +77,7 @@ db.serialize(()=>{
             Bot.say("DJ TANGENT IS THE GREATEST")
           }
           if(params == '!MLuser'){
+            getUserData(chatter.username)
             if(chatter.username != globals.twitchName){
               Bot.say(chatter.username + " is not registered for Missing Link.  Type !MLregister to learn how to register.")
             }else{
@@ -155,7 +156,6 @@ db.serialize(()=>{
           ws.send("api|add_points|" + globals.twitchName + "|" + globals.config.pointsToAward) 
         });
       }
-
       function awardPointsCommand(twitchName){
         const ws = new WebSocket('ws://127.0.0.1:3337/')
         ws.on('open', function open() {

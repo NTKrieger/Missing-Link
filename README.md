@@ -44,3 +44,11 @@ Now that you've entered all your credentials and customized your settings, you c
 !MLregister - Your chatbot will instruct your explain to the chat how to link their Twitter handle to their Twitch account to be eligible for rewards.  This command is only available to the streamer.
 
 !MLinfo - Your chatbot will invite your viewers to retweet your chosen Tweet and advertise the amount of points to be rewarded for doing so.  This command is only available to the streamer.
+
+##Credits
+Missing Link was initially developed for Lush.  Check him out @ twitch.tv/lush_.
+
+The page header & banner graphic were provided by EK.  I'll link him in later if he wants.
+
+
+
