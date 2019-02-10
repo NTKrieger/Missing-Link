@@ -1,24 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const child = require('child_process')
 const exec = require('child_process').exec
 const opn = require('opn');
 const sqlite3 = require('sqlite3').verbose();
 const URL = require('url').URL;
 const server = express();
-const winston = require('winston')
 let globals = {
     settingsString: "none",
     settingsProfile: 0,
 }
-
-//configure logging
-winston.configure({
-    transports:[
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: './logs/testlog.log', handleExceptions: true}),
-    ]
-})
 
 //initialize db and server, load settings, launch server, open UI
 let db = new sqlite3.Database('./data/users.db', (err) => {
@@ -91,7 +81,6 @@ server.post("/data", (req, res, next) => {
     res.send({"status": 200, "data" : "awwwYEAH!"})
     res.end("yes")
 })
-
 //db functions
 function saveSettings(profile, data){  
     db.serialize(()=>{
@@ -118,7 +107,6 @@ function loadSettings(){
         })
     })
 }
-
 //url parsers
 function getSnowflakeFromURL(urlString){
     var myURL = new URL(urlString);

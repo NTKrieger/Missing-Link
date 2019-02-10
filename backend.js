@@ -65,7 +65,7 @@ db.serialize(()=>{
           var index = someString.indexOf(` `);  
           var command = someString.substr(0, index);
           var params = someString.substr(index + 1);       
-          if(command == '!Link'){
+          if(command == '!MLink'){
             writeNewUser(chatter.username, params)
             Bot.say(chatter.username + " has been added to the database!  You can now earn " + globals.config.deepBotCurrency + " for spreading the good news!")
           } 
@@ -73,8 +73,15 @@ db.serialize(()=>{
             awardPointsCommand(params)
             Bot.say(params + " has been awarded" + globals.config.pointsToAward + " " + globals.config.deepBotCurrency)
           }
-          if(params == '!flex' && chatter.username == "djtangent"){
+          if(params == '!MLflex' && chatter.username == "djtangent"){
             Bot.say("DJ TANGENT IS THE GREATEST")
+          }
+          if(params == '!MLuser'){
+            if(chatter.username != globals.twitchName){
+              Bot.say(chatter.username + " is not registered for Missing Link.  Type !MLregister to learn how to register.")
+            }else{
+              Bot.say(globals.twitchName + " is currently linked to @" + globals.twitterName)
+            }
           }
           if(params == '!MLregister' && chatter.username == globals.config.twitchUserName){
             Bot.say("Welcome to Missing Link!  To register for rewards in this channel, type '!link' followed by a space and then your Twitter handle.")
@@ -160,7 +167,7 @@ db.serialize(()=>{
       //database functions
       function searchForMatch(twitterID){
         db.serialize(()=>{
-            let sql = "SELECT * FROM users WHERE twitterID = '" + twitterID.toLowerCase() + "'";
+            let sql = "SELECT * FROM users WHERE twitterID = '" + twitterID.toLowerCase() + "'"
             db.get(sql ,(err, row) => {
                 if (err){
                   return console.error(err)
@@ -180,31 +187,50 @@ db.serialize(()=>{
       }
       function writeNewUser(twitchID, twitterID){  
         db.serialize(()=>{
-            let sql = "INSERT INTO users(twitchID, twitterID) VALUES(" + "'" + twitchID + "'" + ", '"  + twitterID + "')"
+            let sql = "INSERT INTO users(twitchID, twitterID) VALUES(" + "'" + twitchID.toLowerCase() + "'" + ", '"  + twitterID.toLowerCase() + "')"
             db.run(sql, (err)=>{
                 if (err){
                   updateTwitterID(twitchID, twitterID)
+                  Bot.say(twitchID + " your information has been updated.")
                 }
             })
         })
       }
       function updateTimestamp(twitchID){
         db.serialize(()=>{
-            let sql = "UPDATE users SET reward_Timestamp = '" + Date.now() + "' WHERE twitchID = '" + twitchID + "'"
-            db.run(sql, (err) =>{
-                return console.error(err)
-            })
+          let sql = "UPDATE users SET reward_Timestamp = '" + Date.now() + "' WHERE twitchID = '" + twitchID + "'"
+          db.run(sql, (err) =>{
+            return console.error(err)
+          })
         })
       }
       function updateTwitterID(twitchID, newTwitterID){
         db.serialize(()=>{
-            let sql = "UPDATE users SET twitterID = '" + newTwitterID + "' WHERE twitchID = '" + twitchID + "'"
-            db.run(sql, (err) =>{
-                return console.error(err)
-            })
+          let sql = "UPDATE users SET twitterID = '" + newTwitterID.toLowerCase() + "' WHERE twitchID = '" + twitchID.toLowerCase() + "'"
+          db.run(sql, (err) =>{
+            return console.error(err)
+          })
         })
       }
-
+      function getUserData(twitchID){
+        db.serialize(()=>{
+          let sql = "SELECT * FROM users WHERE twitchID = '" + twitchID.toLowerCase() + "'"
+          db.get(sql ,(err, row)=>{
+            if (err){
+              return console.error(err)
+            }
+            let results = row
+            if(typeof results === "undefined"){
+              return console.error("no matches")
+            }else{
+              globals.twitchName = results.twitchID
+              globals.twitterName = results.twitterID
+              globals.lastReward = results.reward_Timestamp
+            }
+          })                 
+        })
+      }
+   
       //execution loop
       setInterval(()=>{checkForRetweets()}, 6100);
     }                   

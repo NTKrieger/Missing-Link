@@ -1,5 +1,4 @@
 //load settings
-
 $(document).ready(function() {
     $.get("http://localhost:30000/data", function(data, status){
         if(status = "success"){
