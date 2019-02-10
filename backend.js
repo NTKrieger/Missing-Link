@@ -141,7 +141,7 @@ db.serialize(()=>{
           }
         })
       }
-
+      
       //Twitch bot Functions
       function rewardMessage(){
         Bot.say(globals.twitchName + " has been awarded " + globals.config.pointsToAward + " " + globals.config.deepBotCurrency)

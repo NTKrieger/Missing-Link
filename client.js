@@ -51,7 +51,7 @@ $(document).ready(function() {
     })
     //donate button handler
     $("#donate-button").click(()=>{
-        alert("coming soon")
+        window.open('https://www.paypal.me/NathanialKrieger', '_blank')
     })
 });
 
