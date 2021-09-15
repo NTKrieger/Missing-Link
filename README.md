@@ -7,7 +7,7 @@ twitch_user: !link <twitter_user>
 
 CHAT_BOT: Congratulations, twitch_user, your Twitter handle has been added to the database! You can now earn points for spreading the good news!
 
-##Getting Started
+## Getting Started
 In order for this program to do anything for you at all, you will need to be a premium DeepBot subscriber and have DeepBot installed.  You will also need to install Node.js, a popular Javascript interpreter, and register a Twitter application to get your API credentials.  The instructions below will walk you step-by-step through the setup process.
 
 The first thing you will need to do is install Node.js.  Navigate to https://nodejs.org/en/download/ and choose the correct build for your operating system.  The download and installation should be quick and easy.
@@ -27,7 +27,7 @@ First is the amount of points to be rewarded when a registered user retweets you
 The second feature is to enter the name of your DeepBot currency, which is used to keep your bots messaging consistent.  
 The third setting is the URL of the Tweet you would like retweeted.
 
-##Entering your Credentials
+## Entering your Credentials
 When you launch the program, a web browser window will open up and you will be able to enter all the information Missing Link needs to work its magic.  The first time you launch the application, you will need to enter a number of API credentials in order for the bot to function.  I've provided some helpful information below which should help you locate everything.
 
 The DeepBot API secret is available in the Master Settings menu of DeepBot, which is in the upper right-hand corner of the application window.
@@ -38,14 +38,14 @@ Lastly, you will need the Twitter API credentials which you went to such great l
 
 Now that you've entered all your credentials and customized your settings, you can click the launch button to get started!
 
-##Commands
+## Commands
 !Link <twittername> - This command will link the Twitch account and the Twitter account together in the Missing Link database.  Each user will only need to complete this process once.  If the user makes a typo or would like to change their associated Twitter account, they can use the command again and it will overwrite the previous data.  Each Twitch user can link only one Twitter account and will only rewarded once per session to prevent abuse.
 
 !MLregister - Your chatbot will instruct your explain to the chat how to link their Twitter handle to their Twitch account to be eligible for rewards.  This command is only available to the streamer.
 
 !MLinfo - Your chatbot will invite your viewers to retweet your chosen Tweet and advertise the amount of points to be rewarded for doing so.  This command is only available to the streamer.
 
-##Credits
+## Credits
 Missing Link was initially developed for Lush.  Check him out @ twitch.tv/lush_.
 
 The page header & banner graphic were provided by EK.  I'll link him in later if he wants.
